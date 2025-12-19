@@ -24,6 +24,7 @@ import PromotionsPage from './features/promotions/PromotionsPage';
 
 // Lazy load heavy components (code splitting)
 const HostDashboard = lazy(() => import('./features/host/HostDashboard'));
+const AdminDashboard = lazy(() => import('./features/admin/AdminDashboard'));
 const BookingPage = lazy(() => import('./features/booking/BookingPage'));
 const BookingDetailsPage = lazy(
   () => import('./features/booking/BookingDetailsPage')
@@ -96,6 +97,10 @@ const RoleBasedHome = () => {
 
   if (role === 'HOST') {
     return <Navigate to="/host" replace />;
+  }
+
+  if (role === 'ADMIN') {
+    return <Navigate to="/admin" replace />;
   }
 
   // CUSTOMER -> Landing Page
@@ -212,6 +217,18 @@ function App() {
               <ProtectedRoute allowedRoles={['HOST']}>
                 <Suspense fallback={<PageLoader />}>
                   <HostDashboard />
+                </Suspense>
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Admin Routes - No MainLayout (has own sidebar) */}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute allowedRoles={['ADMIN']}>
+                <Suspense fallback={<PageLoader />}>
+                  <AdminDashboard />
                 </Suspense>
               </ProtectedRoute>
             }
